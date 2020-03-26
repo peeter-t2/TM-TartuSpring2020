@@ -1,4 +1,4 @@
-# Eksamitöö aines HVEE.01.006	Suurte tekstiandmete töötlemine ja analüüs humanitaarteadustes (3 EAP)
+# 4. kodutöö aines HVEE.01.006	Suurte tekstiandmete töötlemine ja analüüs humanitaarteadustes (3 EAP)
 
 # Nimi:
 # Kuupäev:
@@ -8,7 +8,7 @@
 rm(list=ls()) #eemaldab need muutujad
 
 
-# Eksamitöö annab kokku 20 punkti. Iga õige vastus annab ühe punkti. Iga poolik vastus annab pool punkti.
+# Kodutöö annab kokku 20 punkti. Iga õige vastus annab ühe punkti. Iga poolik vastus annab pool punkti.
 
 
 # Faili alguses loe sisse paketid/raamatukogud, mis on analüüsi jaoks vajalikud
