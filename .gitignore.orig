@@ -1,0 +1,7 @@
+build/
+_bookdown_files/
+tekstid_R_2020/
+.Rproj.user/
+_bookdown.yml
+index.Rmd
+.gitignore
