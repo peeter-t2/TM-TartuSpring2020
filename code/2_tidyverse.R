@@ -4,7 +4,7 @@
 #' output: html_document
 #' ---
 #' 
-#' # Tidyverse
+#' # Tidyverse paketid
 #' 
 #' ## Paketid
 #' 
@@ -13,7 +13,7 @@
 #' Iga pakett tuleb kõigepealt installida. Tavapakettide puhul piisab selleks käsust install.packages(), millele tuleb sisendiks anda paketi nimi jutumärkides. Käivitage järgnev käsk. Kui tidyverse pole arvutisse varem installitud, installib R selle nüüd. Kui pakett on juba installitud, püüab R seda uuendada.
 #' 
 #' 
-## ---- eval=F-------------------------------------------------------------------------------------------------------------------------------
+## ---- eval=F-----------------------------------------------------------------------
 ## 
 ## install.packages("tidyverse")
 ## 
@@ -21,7 +21,7 @@
 #' 
 #' Paketi sisselugemiseks kasutame funktsiooni library(). Peaaegu samaväärne funktsioon on require() kui mõnikord skriptides on just seda kasutatud. Loeme kõigepealt sisse library(tidyverse).
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 library(tidyverse)
 
@@ -41,7 +41,7 @@ library(tidyverse)
 #' 2. Kas on kataloog nimega "Rstudio_packages". Kui seda ei ole, siis tee see.
 #' 3. Jooksuta järgmist käsku.
 #' 
-## ----eval=F--------------------------------------------------------------------------------------------------------------------------------
+## ----eval=F------------------------------------------------------------------------
 ## 
 ## .libPaths("C:/Users/Public/Documents/Rstudio_packages")
 ## 
@@ -56,7 +56,7 @@ library(tidyverse)
 #' 
 #' Kuigi R-i võib kasutada ka lihtsateks numbriarvutusteks, siis üldiselt kasutatakse R-i tööks andmistekega. Andmestikud on enamasti salvestatud failidesse teatud formaadis (näiteks .csv, .tsv või .xls). Faili sisse lugemiseks on hulk erinevaid käske ja on vähe failitüüpe, millest R pakettide abiga jagu ei saa. Praegu on meil fail .tsv formaadis ja selle lugemiseks sobib meile käsk read_tsv().
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 read_tsv("data/eesti_top40/eesti_skyplus_top40_1994-2018.tsv")
 
@@ -67,7 +67,7 @@ read_tsv("data/eesti_top40/eesti_skyplus_top40_1994-2018.tsv")
 #' Andmestiku salvestamiseks kasutame tuttavat noole <- tähist. Siis on meil edaspidi andmestik kättesaadav muutuja *edetabel* all.
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel <- read_tsv("data/eesti_top40/eesti_skyplus_top40_1994-2018.tsv")
 
@@ -81,7 +81,7 @@ edetabel <- read_tsv("data/eesti_top40/eesti_skyplus_top40_1994-2018.tsv")
 #' 
 #' View käsk näitab andmemuutuja sisu eraldi aknas. Proovi kirjutada konsooli sama käsk. 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 View(edetabel)
 
@@ -130,7 +130,7 @@ View(edetabel)
 #' Töötluse näites, kui me trükime edetabel %>% names(), saame andmestiku kõikide tulpade nimed jadana. Proovi järgi: mine reale ja vajuta Ctrl+Enter. R teab, et %>% torumärgile peaks järgnema veel käsk ja ta loeb seda edasi, isegi kui selleks peab minema järgmisele reale. Seda ära kasutades ning töötluse loetavuse nimel paigutatakse tidyverse stiilis iga käsk eraldi reale. Kui koostad keerulise funktsiooni, võid küll sellest ise kergesti aru saada, aga juhuslikule lugejale on palju kergem kui kõik operatsioonid on selgelt eraldatud.
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   names()
@@ -151,7 +151,7 @@ edetabel %>%
 #' 
 #' Käsk select() valib andmestikust teatud tulbad. Seda võib teha nime kaudu või mingil muul alusel, nii võib saada ühe või mitu tulpa. Kirjutades select(year) toru järgi valime siis year-nimelise tulba, ehk tulba kus on aastaarvud.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   select(year)
@@ -160,7 +160,7 @@ edetabel %>%
 #' 
 #' Käsk unique() valib andmestikust kõik read, mis on unikaalse. Näiteks valides unikaalsed read aasta tulbast saame jada 25-st erinevast aastast, mis on andmestikus.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   select(year) %>% 
@@ -170,7 +170,7 @@ edetabel %>%
 #' 
 #' Kui me võtame unikaalsed read tervest andmestikust, saame vastuseks sama andmestiku, kuna kõik read on seal unikaalsed.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   unique()
@@ -181,7 +181,7 @@ edetabel %>%
 #' 
 #' Näiteks, kui me tahame leida kõiki Smilersi lugusid võime me otsida välja kõik read, kus tunnus artist on sama kui tekst "Smilers". Tähtis on selle päringu juures, et see tunnus peab olema täpselt sama. Pane tähele ka, et siin on siis kasutatud topeltvõrdumärki ==.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   filter(artist=="Smilers")
@@ -190,7 +190,7 @@ edetabel %>%
 #' 
 #' Kui me kasutame nime smilers väikse algustähega, siis me neid tulemusi ei leia, kuna tulemus pole täpselt sama. Kui me suurest või väiksest algustähest ei hooli, võime muuta terve tunnuse selliseks, et tal on väike algustäht või kasutada regulaaravaldisi vaste leidmiseks. Sellest on näiteid hiljem.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   filter(artist=="smilers")
@@ -200,7 +200,7 @@ edetabel %>%
 #' Proovi nüüd ise leida kõik Ummamuudu lood, kirjutades sarnane koodijupp siia alla.
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -214,7 +214,7 @@ edetabel %>%
 #' 
 #' Me võime ka kombineerida omavahel filter() ja select(), et saata väiksema ülevaate tabelist. Näiteks võime võtta välja kõikide Smilersi lugude aastad ja pealkirjad.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel%>% 
   filter(artist=="Smilers") %>% 
@@ -224,7 +224,7 @@ edetabel%>%
 #' 
 #' Neid käske võib ka korduvalt lisada. Näiteks saame võtta kõigepealt Smilersi lood ja siis nende seast välja ainult lood, mis olid edetabelis aastal 1998.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel%>% 
   filter(artist=="Smilers") %>% 
@@ -235,7 +235,7 @@ edetabel%>%
 #' 
 #' Või näiteks 2000 ja 2008 aasta vahel.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel%>% 
   filter(artist=="Smilers") %>% 
@@ -247,7 +247,7 @@ edetabel%>%
 #' 
 #' Soovi korral võib mitu filtrit ka ühendada ühte käsku. Sel juhul tuleb kasutada & märki nende ühendamiseks. 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel%>% 
   filter(artist=="Smilers") %>% 
@@ -258,7 +258,7 @@ edetabel%>%
 #' 
 #' Me võime ka kõik filtrid panna kokku ühte käsku
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel%>% 
   filter(artist=="Smilers" & year>2000 & year<2008) %>% 
@@ -268,7 +268,7 @@ edetabel%>%
 #' 
 #' Filtrite puhul võime kasutada ka või | märki. Näiteks võime sama käsku väljedada ka mitte piirkondadega, vaid andes ette võimalikud variandi võiga.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel%>% 
   filter(artist=="Smilers") %>% 
@@ -279,7 +279,7 @@ edetabel%>%
 #' 
 #' Viimaks võime kasutada ka eelpool mainitud %in% käsku, mis kontrollib väärtuse olemasolu jadas.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel%>% 
   filter(artist=="Smilers") %>% 
@@ -292,7 +292,7 @@ edetabel%>%
 #' 
 #' Proovi nüüd kätte saada kõik lood mis olnud smilersil küll esikümnes, aga mitte esiviies. (Vihje: vaata tulpa rank.)
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -309,7 +309,7 @@ edetabel%>%
 #' Proovi leida ka kõik lood, mis olid 1990ndatel tabelis inglise keeles. (Vihje: vaata tulpa language.)
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -324,7 +324,7 @@ edetabel%>%
 #' 
 #' Tihti soovime näha või kasutada mitte tervet andmestikku, vaid juhuslikku osa sellest. Lihtsa valimi tekitamiseks on ka olemas omaette käsk. sample_n() võtab hulgast välja juhusliku n rida, kus n-i väärtuse me määrame sulgude sees. Teeme väikse katse iseendaga, trükime välja 10 lugu aastast 1997 ja 10 lugu aastast 2017. Vaatame ja võrdleme. Mitu lugu ja esinejat tunneme ära rohkem kui 20 aastat tagasi, mitu esinejat tunneme ära hiljutisest edetabelist. Tulemused ütlevad siinkohal küll rohkem lugeja enda kohta kui andmestiku kohta.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   filter(year==1997) %>% 
@@ -333,7 +333,7 @@ edetabel %>%
 
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   filter(year==2017) %>% 
@@ -343,7 +343,7 @@ edetabel %>%
 #' 
 #' Proovi ise! Võta andmestikust välja 10 juhuslikku esikohalugu. Vaata, kas neid tead?
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -366,7 +366,7 @@ edetabel %>%
 #' 
 #' Et saada tabelist ja selle sisust paremat ülevaadet, on võimalik selles esinevaid väärtusi ka loendada. Näiteks vaatame artistide esinemiskordasid top 40s. Esinemiskordade arv sai salvestatud tulpa n.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>%
   count(artist)
@@ -377,7 +377,7 @@ edetabel %>%
 #' 
 #' Nii saame kätte artistid, kes said kõige enam tabelisse.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>%
   count(artist,sort=T)
@@ -386,7 +386,7 @@ edetabel %>%
 #' 
 #' Selliseid lisavõimalusi leiab iga käsu juhendist, mida saab vaadata lisades käsu ette küsimärgi. Näiteks ?count. Proovi seda! All vasakul avaneb seepeale juhend Help aknas. Failivaatele tagasi saab vajutades sälgule Files.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 ?count
 
@@ -394,7 +394,7 @@ edetabel %>%
 #' 
 #' Niiviisi võime loendada ka ükskõik mida. Näiteks, palju oli lugusid eri keeltes.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   count(language,sort=T)
@@ -404,7 +404,7 @@ edetabel %>%
 #' Näeme et 686 lugu on eestikeelset, 133 lugu on ingliskeelset ja 178 loo puhul ei tea me täpselt, mis keeles need on. See on andmestiku eripära, enamikes andmestikes on puuduvaid andmeid. Andmete puuduvuse kontrollimine ei käi võrdusmärkidega, aga funktsiooniga is.na(). Näiteks filter(is.na(language)) annab meile kõik lood, kus on keel puudu.
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   filter(is.na(language))
@@ -413,7 +413,7 @@ edetabel %>%
 #' 
 #' Võime salvestada tulemuse, et seda lähemalt vaadata. 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 puuduvad <- edetabel %>% 
   filter(is.na(language))
@@ -422,7 +422,7 @@ puuduvad <- edetabel %>%
 #' 
 #' Ja vaatame talle sisse.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 View(puuduvad)
 
@@ -432,7 +432,7 @@ View(puuduvad)
 #' 
 #' Katsetame veel count() funktsiooni. Võime näiteks kokku lugeda, mitu korda esineb iga aastat, ehk et mitu lugu on igas aastas. Näeme, et kenasti 40 lugu aastas on top 40-s.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   count(year)
@@ -441,7 +441,7 @@ edetabel %>%
 #' 
 #' Me võime loendada mitut gruppi korraga. Näiteks loendades, mitu korda on artist ja aastaarv koos, saame teada mitu lugu artistilt sel aastal edetabelis oli.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   count(artist,year,sort =T) 
@@ -450,7 +450,7 @@ edetabel %>%
 #' 
 #' Me võime ka loendada neid gruppe korduvalt. Näiteks loendades seal veelkord aastaarvu, saame teada, mitu erinevat artisti oli konkreetsel aastal edetabelis.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   count(artist,year) %>% 
@@ -460,7 +460,7 @@ edetabel %>%
 #' 
 #' Võime seda kombineerida ka filtritega. Näiteks võime vaadata iga aasta kohta, mitu eesti popmuusika lipulaevade lugu edetabelis oli.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   filter(artist=="Smilers") %>% 
@@ -468,7 +468,7 @@ edetabel %>%
 
 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   filter(artist=="Terminaator") %>% 
@@ -482,7 +482,7 @@ edetabel %>%
 #' Proovi veel ühe enda valitud artistiga, mis aastail kui palju lugusid neil on olnud.
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -497,7 +497,7 @@ edetabel %>%
 #' 
 #' Proovi ka teada saada, mitu lugu oli mis keeles 1994 aastal ja 2014 aastal.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -512,7 +512,7 @@ edetabel %>%
 #' Võib märgata, et kui me loendame tunnuste väärtuseid tabelis, siis me jaotame oma andmestiku gruppideks ja ütleme kui palju seal väärtuseid on. Selleks on olemas R-is ka üldisem funktsioon group_by(). Kui me loendasime artiste aasta peale kasutades count() käsus kaht tunnust, nagu all, siis võime seda teisiti sõnastada ka, et me grupeerisime andmestiku artistide kaupa ja loendasime esinemisi aastas.
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   count(artist,year,sort =T) 
@@ -520,7 +520,7 @@ edetabel %>%
 
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -533,7 +533,7 @@ edetabel %>%
 #' 
 #' Me võime grupeerimist ka filtritega. Näiteks võime võrrelda, kui palju oli lugusid eri keeltes 1990ndate aastate keskel ja 2010ndate aastate keskel.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   filter(year%in%c(1994,2014)) %>% 
@@ -543,7 +543,7 @@ edetabel %>%
 #' 
 #' Ja sama võrdlus group_by() funktsiooniga.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   filter(year%in%c(1994,2014)) %>% 
@@ -554,7 +554,7 @@ edetabel %>%
 #' 
 #' Proovi ise! Grupeeri andmestik lugude kaupa ning vaata, mitmel aastal nad tabelisse said.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -582,7 +582,7 @@ edetabel %>%
 #' 
 #' arrange() käsk järjestab andmestiku mingi tunnuse järgi. Näiteks järjestame tabeli nii, et tipus on kõik esikohad, järgnevad teised kohad ja nii edasi.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   arrange(rank)
@@ -591,7 +591,7 @@ edetabel %>%
 #' 
 #' Me võime järjestada ka mitme tunnuse alusel. Järjestame nad kõigepealt edetabelikoha järgi, aga lisame, et uuemad lood võiksid olla ees. Selle jaoks saame lisada lihtsalt komaga eraldatult uue tunnuse. desc() funktsioon pöörab tunnuse järjestuse ümber, nii et suurim väärtus on eespool
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   arrange(rank, desc(year))
@@ -600,7 +600,7 @@ edetabel %>%
 #' 
 #' Samuti ei pruugi järjestada ainult numbrite alusel, vaid saab järjestada ka tekstijuppe tähestiku alusel. Näiteks saame asetada lood tähestiku järjekorda. Seejuures numbrid ja sümbolid on sellistes järjestustes enamasti paigutatud tähtedest ettepoole.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   arrange(song)
@@ -609,7 +609,7 @@ edetabel %>%
 #' 
 #' Kui me tahaksime kätte saada kõik kolmanda koha lood, võime kasutada käsku filter().
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   filter(rank==3)
@@ -618,7 +618,7 @@ edetabel %>%
 #' 
 #' Kui me aga tahaksime kätte saada populaarsuselt kolmanda artisti, siis ei ole meil filtreerimiseks kohe alust.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   count(artist,sort=T)
@@ -629,7 +629,7 @@ edetabel %>%
 #' 
 #' Et saada kätte kolmanda koha, peame lisama andmestikule uut informatsiooni, näiteks järjekorranumbri. Selleks on tidyverse pakettides käsk mutate(), mis muudab üht andmestiku tulpa. Kui anda sisendiks tulba nimi, mis veel ei eksisteeri, saab käsk selle lisada. Ja teine käsk, mida me saame siin kasutada on row_number(). See tekitab jada, mis algab ühest ja lõppeb rea pikkusega. Tulba lisamiseks märgime nii mutate(tulbanimi = sisend) ehk praegu mutate(rownr = row_number()).
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   count(artist,sort=T) %>% 
@@ -639,7 +639,7 @@ edetabel %>%
 #' 
 #' Näeme, et uus tulp on lisatud. Nüüd saame selle alusel omakorda võtta välja täpselt kolmanda koha selles tabelis, ükskõik, mis väärtusega n ka parasjagu ei ole.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   count(artist,sort=T) %>% 
@@ -650,7 +650,7 @@ edetabel %>%
 #' 
 #' Tidyverse lubab siinkohal ka natuke lõigata. Nimelt filtrisse minev number ei pruugi olla arvutatud, vaid selle võib ka filtreerimise käigus arvutada. Nii saab täpselt samad tulemused jättes ka mutate() käsu kõrvale. Sisuliselt siiski arvutab filter andmestikus uue muutuja, seda lihtsalt ei jäädvustata kusagile.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   count(artist,sort=T) %>% 
@@ -660,7 +660,7 @@ edetabel %>%
 #' 
 #' mutate() võib kohaldada igal pool. Näiteks võime lisada tabelisse väärtuse artisti kohast tähestiku jä
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   arrange(artist) %>% 
@@ -670,7 +670,7 @@ edetabel %>%
 #' 
 #' Ja võime sellest filtreerida välja esimesed 100 artisti tähestikus.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   arrange(artist) %>% 
@@ -682,7 +682,7 @@ edetabel %>%
 #' 
 #' mutate() naaberkäsk on summarise(). Nad mõlemad püüavad tabelit muuta, mutate() teeb seda info lisamise või asendamise kaudu. summarise() teeb seda info kokkuvõtmise kaudu. Näiteks võime tabelist välja võtta selle esimese aasta ja viimase aasta min() ja max() kaudu.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   summarise(first=min(year), last=max(year))
@@ -691,7 +691,7 @@ edetabel %>%
 #' 
 #' Või võime ka kokku lugeda, mitu rida andmestikus on käsuga n().
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   summarise(n = n())
@@ -704,7 +704,7 @@ edetabel %>%
 #' ## group_by() kasutamine
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -717,7 +717,7 @@ edetabel %>%
 #' 
 #' Näiteks võime välja võtta andmestikust info iga artisti esimese ja viimase aasta kohta kui nad said andmestikku. Nii saame ülevaate artistide kestvusest.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -727,7 +727,7 @@ edetabel %>%
 #' 
 #' Võime selle tabeli reastada algusaja järgi, et näha tabelis uusi tulijaid eespool.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -738,7 +738,7 @@ edetabel %>%
 #' 
 #' mutate() käsuga võib andmestikust kätte saada täpselt sama info, aga selle asemel, et kokku võtta, lisab ta selle andmestikule. Näiteks eelmised käsud lisavad siis põhiandmestikule uued tulbad.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -748,7 +748,7 @@ edetabel %>%
 #' 
 #' Samamoodi võib ka andmestikule lisada kui palju oli ühes grupis liikmeid.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -758,7 +758,7 @@ edetabel %>%
 #' 
 #' Sellisel juhul võime seda edasi töödelda ja võtta mitte ainult nimed, vaid ka kõik laulud tippartistidelt, kus artist oli tabelis rohkem kui kümne looga.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -769,7 +769,7 @@ edetabel %>%
 #' 
 #' Ja kokkuvõttes võime näiteks välja arvutada nende lugude keskmise koha. Siis kui me soovime gruppe jälle laiali lahutada, tuleb kasutada funktsiooni ungroup()
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -783,7 +783,7 @@ edetabel %>%
 #' Kui me gruppe laiali ei lahuta, mõõdame nii iga tippartisti keskmist tulemust
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -795,7 +795,7 @@ edetabel %>%
 #' 
 #' group_by() muudab veidi ka teiste käskude käitumist. Kuivõrd filter võib viidata otse arvutusele ja mitte ainult tulbale, saab group_by() muuta ka selle käitumist. Näiteks kui me grupeeritud andmestikus kasutame filtrit ja arvutame sinna uue väärtuse, siis teeb ta seda grupi kaupa. Nii võime näiteks leida iga artisti esimesed lood, ilma uut tulpa tekitamata.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>%
   group_by(artist) %>% 
@@ -805,7 +805,7 @@ edetabel %>%
 #' 
 #' group_by() muudab ka select() veidi, kuna grupeerivaid faktoreid ei saa kõrvale jätta. Näiteks proovime seda eelmisel tabelil.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>%
   group_by(artist) %>% 
@@ -817,7 +817,7 @@ edetabel %>%
 #' Soovitav on sellisel juhul pärast igat grupeerimist andmestiku salvestamisel grupid uuesti lahti haakida. See aitab kaasa sellele, et vigu ei tekiks ja samas mõned funktsioonid ei tööta hästi grupeeritud andmetega - nad võivad üldse mitte toimida või muutuda väga aeglaselt kui töötluse peab tegema grupeeritud andmetega näiteks tuhandes väikses grupis ühe suure grupi asemel.
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>%
   group_by(artist) %>% 
@@ -835,7 +835,7 @@ edetabel %>%
 #' 
 #' Mõtleme nüüd, kuidas võiks saada parima tulemuse saanud loo iga artisti kohta. Alustame andmete grupeerimisest artisti kaupa.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist)
@@ -844,7 +844,7 @@ edetabel %>%
 #' 
 #' Kasutame funktsiooni arrange tulemuse alusel reastamiseks.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -854,7 +854,7 @@ edetabel %>%
 #' 
 #' Nüüd me peaksime kätte saama, mitmes paremuselt oli mõni lugu ühe grupi jaoks. Selleks lisame mutate() käsuga uue tulba. row_number() annab meile järjekorranumbri. Niisiis saame tulemused järjestatud artisti kaupa paremuse alusel.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -865,7 +865,7 @@ edetabel %>%
 #' 
 #' Nüüd saame teha filtri ainult parimate lugude jaoks ja saamegi tulemuse kätte.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   group_by(artist) %>% 
@@ -878,7 +878,7 @@ edetabel %>%
 #' 
 #' Proovi ise! Kas suudad välja mõelda, kuidas eelmist tulemust saaks kätte ka vähema hulga ridade ja käskudega.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -894,7 +894,7 @@ edetabel %>%
 #' 
 #' Proovi ise! Kuidas saad kätte iga artisti paremuselt kümnenda loo?
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -908,7 +908,7 @@ edetabel %>%
 
 #' Kuidas saaks kätte iga artisti viimasena tabelisse pääsenud loo?
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -926,7 +926,7 @@ edetabel %>%
 #' 
 #' Lõpuks võib proovida mutate() kaudu arvutada välja mõne uue väärtuse. Näiteks, ütleme, et anname lugudele punkte, nii, et esimene koht annab 40 punkti ja 40. koht 1 punkti. Siis on punkti väärtus 41 miinus koht.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   mutate(skoor=41-rank)
@@ -936,7 +936,7 @@ edetabel %>%
 #' Ja kui meil on olemas selline koondindeks võime proovida kokkku arvutada näiteks parima loo või parima artisti. Selleks saame kasutada funktsiooni summarise(). Näiteks terve tabeli peale saab võtta miinimum ja maksimum positsiooni. Kui me tahame saada parimat lugu selle punktisumma järgi, võime need punktisummad näiteks kokku liita iga loo kohta
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   mutate(skoor=41-rank) %>% 
@@ -949,7 +949,7 @@ edetabel %>%
 #' Käime katuseid mööda võidab suisa 99 punkti, mis tähendab et ta oli tabelis vähemalt kolmel aastal. Ja võime teha sama ka artisti kaupa ja arvutada välja populaarsuse määra, mis arvestab ka positsiooniga tabelis. Kui muidu oli lugude arvult Smilers ja Terminaator üsna ligi teineteisele, siis selle punktisumma järgi on Smilers siiski tublisti Terminaatorist ees. Terminaator vajaks veel 5-t esikümnehitti rohkem kui smilers, et talle järgi tulla.
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>% 
   mutate(skoor=41-rank) %>% 
@@ -961,7 +961,7 @@ edetabel %>%
 #' 
 #' Proovi ise! Mõtle välja uus muutuja, mida võiks arvutada ning mille alusel artiste järjestada. (Vihje: votes tulpa pole me siiani kasutanud.)
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 

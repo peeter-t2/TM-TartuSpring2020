@@ -10,7 +10,7 @@
 #' 
 #' Kui me käivitasime just R-i, siis alustame jälle pakettide käivitamisest.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 library(tidyverse)
 library(tidytext)
@@ -19,7 +19,7 @@ library(tidytext)
 #' 
 #' Samuti vajame me taaskord andmestikku. Veenduge, et töökataloog on määratud õigesse kohta.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel <- read_tsv("data/eesti_top40/eesti_skyplus_top40_1994-2018.tsv")
 
@@ -29,7 +29,7 @@ edetabel <- read_tsv("data/eesti_top40/eesti_skyplus_top40_1994-2018.tsv")
 #' 
 #' Eelmises peatükis kasutasime unnest_tokens() funktsiooni, et lahutada tabelis olevaid tekste sõnapikkusteks üksusteks. Nagu teised funktsioonis R-is on ka unnest_tokens() mõneti paindlik ja sellega saab teha veidi teistsuguseid asju, muutes selle parameetreid. Kasutame küsimärki ? käsu ees, et saada liig selle abifailile. Käsu käivitamine avab abiteksti paremal all ja näitab seda failide asemel. Failide ja abiteksti vahel saab liikuda selle akna menüüs (siis vastavalt Help ja Files sälgud).
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 ?unnest_tokens
 
@@ -50,7 +50,7 @@ edetabel <- read_tsv("data/eesti_top40/eesti_skyplus_top40_1994-2018.tsv")
 #' 
 #' Meenutuseks, et eelmises õppetükis tegime sellise tabeli. Me võime seal eraldi märkida, et token = "words", aga me võime selle ka ära jätta, kuna "words" on seal antud juhul vaikeväärtus.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>%
   unnest_tokens(word, lyrics, token = "words")
@@ -59,7 +59,7 @@ edetabel %>%
 #' 
 #' Samas nägime abifailist, et seda võib ka muuta. Asetame siis selleks "ngrams". Kui väärtuseks on määratud "ngrams", siis me peame omakorda määrama selles lisaparameetreid. Nimelt soovib käsk teada, kui suuri mitmikuid me soovime. Määratleme minimaalse suuruse n_min = 2 ja maksimaalse suuruse n = 2. Sellisel juhul teeb unnest_tokens() sõnade tabeli asemel bigrammide tabeli.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>%
   unnest_tokens(bigram, lyrics, token = "ngrams", n = 2, n_min = 2)
@@ -68,7 +68,7 @@ edetabel %>%
 #' 
 #' Proovime mängida parameetritega. Näiteks võime käsu sees määratleda ka et mitmike pikkus peaks olema ühest kolmeni. Sellisel juhul näitab käsk kõiki võimalikke mitmike suurusega ühest kolmeni, ehk nii sõnu, bigramme kui trigramme.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>%
   unnest_tokens(bigram, lyrics, token = "ngrams", n = 3, n_min = 1)
@@ -77,7 +77,7 @@ edetabel %>%
 #' 
 #' Võtame siis ette bigrammid. Et meil on tabelit korduvalt vaja ning selle tekitamine võtab hetk aega, salvestame selle tulemuse jälle muutujasse.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams <- edetabel %>%
   unnest_tokens(bigram, lyrics, token = "ngrams", n = 2, n_min = 2)
@@ -86,7 +86,7 @@ bigrams <- edetabel %>%
 #' 
 #' Samamoodi kui sõnadest, saame me teha ka bigrammidest sagedustabeli. Levinud fraasid on ikka samad kui keeles ikka 'ei saa', 'ei ole', 'ei tea', 'ma ei', 'ma olen', 'mul on'.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,sort=T)
@@ -95,7 +95,7 @@ bigrams %>%
 #' 
 #' Nagu sai näidatud varasemates peatükkides saame loendada mitu tunnust korraga. Seeläbi saame näiteks kokku lugeda fraasikordusi ühes laulus. Näiteks na na, oo oo ja ba da on väga populaarsed fraasid.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T)
@@ -106,7 +106,7 @@ bigrams %>%
 #' 
 #' Kui me loendame laulu, artisti ja aasta kombinatsioone, siis tabel juba mõneti muutubki. Näiteks "jalas polnud" ja "polnud pükse" kaovad edetabelist ära, kuna Peegelpõranda laul oli tabelis kaks aastat, mistõttu olid sõnasagedused leotud topelt.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,artist,year,sort=T)
@@ -120,7 +120,7 @@ bigrams %>%
 #' 
 #' Me saame aga oma tabelit muuta selle järgi. mutate() käsule saame anda sisendiks, et ta viiks tulbad väiketähtede kujule. Selleks on funktsioon tolower(). Ja me saame grupeerida ja filtreerida andmsetikku nii, et iga artisti ja laulu kombinatsiooni kohta jääb alles ainult esimene aasta.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>%
   mutate(artist=tolower(artist),song=tolower(song)) %>% 
@@ -131,7 +131,7 @@ edetabel %>%
 #' 
 #' Niimoodi andmestikku muutes, saame kokku kokku 947 erinevat lugu eelmise 1000 asemel. Salvestame selle tabeli nime all firstsongs. Grupeeriv faktor tasub salvestades enamasti lahti siduda, kuna mõned funktsioonid nõuavad grupeerimata andmestikku või muutuvad väga aeglaseks siis, kui andmestik on tehtud paljudeks gruppideks.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 firstsongs <- edetabel %>%
   mutate(artist=tolower(artist),song=tolower(song)) %>% 
@@ -143,7 +143,7 @@ firstsongs <- edetabel %>%
 #' 
 #' Salvestatud puhastatud tabelit saame kasutada nüüd sisendina edasiseks analüüsiks. Leiame uuesti bigrammid tekstide seast ning salvestame need vana muutuja asemele.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams <-firstsongs %>%
   mutate(artist=tolower(artist),song=tolower(song)) %>% 
@@ -156,7 +156,7 @@ bigrams <-firstsongs %>%
 #' 
 #' Samuti nagu varem võime nüüd loendada bigramme laulude kohta. Seekord aga ei pea vaatama, mis aastaga tegemist on ja paljud kordused on nüüd kadunud. On muidugi lugusid, millel artisti või laulu nimi erineb aasta-aastalt veidi rohkem kui ainult suurtähtede ja väiketähtede kaudu - näiteks seesama tantsin valssi, mille artist on muutunud. Aga paljuski saame me nii juba täpsema info. Et kõik sama loo erinevad variandid saaks eemaldatud, tuleb veel täpsemalt proovida artisti nimesid ühitada. Praegu piirdume suur- ja väiketähtedega.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,artist,sort=T)
@@ -167,7 +167,7 @@ bigrams %>%
 #' 
 #' Nagu varem sõnadega, võime me filtreerida seda tabelit ka fraasi kaupa. Näiteks 'ei saa' esinemised eri lauludes saame kätte niiviisi. Päris paljudes lauludes kordub fraas 'ei saa' mitmeid kordi. Tähele võib panna, et sellisel juhul on aga oluline, et fraas oleks täpselt selline nagu on kirjeldatud.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -182,7 +182,7 @@ bigrams %>%
 #' 
 #' Need funktsioonid võtavad sisendina vaikimisi regulaaravaldisi, mis avardab meie otsimisvõimekust oluliselt. Otsides ainult järjendit 'ei saa' leiame, et meie esialgne otsing ei leidnud varianti, ei saagi, mida kordub ühe loo sees isegi kõige rohkem. Nimelt läheb edetabeli tippu toe tag pankrott, kus fraas 'ei saagi' esineb suisa 42 korda. Kuivõrd ta on tähenduselt üsna sarnane, siis on seda meilgi ehk oluline teada.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -192,7 +192,7 @@ bigrams %>%
 #' 
 #' Me võime ka otsida kõiki sarnaseid fraase, mis algavad eitusega. Selleks otsime sõna ei, millele järgneb tühik ja siis ükskõik milline tähekombinatsioon. Ja saame, et neid eitavas vormides fraase on lugude seas veel. ei-ei, ei saa, ei hooli, ei pea, ei huvita ei lase, jne.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -202,7 +202,7 @@ bigrams %>%
 #' 
 #' Teine viis leida kõik fraasid, mis algavad sõnaga ei, on kasutada regulaaravaldiste teksti alguse tähist ^. Nii teab käsk, et 'ei' peab olema fraasi alguses.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -213,7 +213,7 @@ bigrams %>%
 #' 
 #' Tõtt-öelda bigrammidega piisab ka tühikust, kuna neis on tühik alati esimesest sõnast paremal.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -223,7 +223,7 @@ bigrams %>%
 #' 
 #' Võime proovida otsida ka näiteks sidesõnale ja järgnevaid sõnu.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -233,7 +233,7 @@ bigrams %>%
 #' 
 #' Me võime otsida sedasi ükskõik mida.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -242,7 +242,7 @@ bigrams %>%
 
 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -252,7 +252,7 @@ bigrams %>%
 #' 
 #' Proovige leida nüüd kõik fraasid, mis sisaldavad eestit ükskõik, mis kujul
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -270,7 +270,7 @@ bigrams %>%
 #' 
 #' Teine küsimus, kus regulaaravaldised kuluvad eriti ära, on kui me tahame teada saada teatud sõnavormide kohta. Näiteks meid huvitavad kõik armastusega seotud sõnad neis lauludes. Võime teha otsingu, mis hõlmaks 'armastus', 'armastama' ja selle vorme. Nii saame kätte kõik fraasid, kus on sellest mingil määral juttu.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -280,7 +280,7 @@ bigrams %>%
 #' 
 #' Kui me aga tahame küsida sõna eri vormide kohta, võime me leidude vasted uude tabeli tulpa panna. str_extract() võtab tekstist välja täpselt sellise vormi, mis me leidsime.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -291,7 +291,7 @@ bigrams %>%
 #' 
 #' Selleks, et saada tervet sõna, peame regulaaravaldist pikendama, et ta võtaks kaasa kõik tähestiku tähed, aga mitte tühikud.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -303,7 +303,7 @@ bigrams %>%
 #' 
 #' Ja nüüd võime omakorda kokku lugeda, mis vormides need sõnad olid
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -315,7 +315,7 @@ bigrams %>%
 #' 
 #' Samamoodi võime võtta näiteks välja kõik sõnad, mis järgnevad sõnale armastus, ükskõik, mis vormis. Lisame otsingule sõna alguse tähise, ning võtame välja kõik, mis järgneb tühikule. Nagu arvata oli on ikka kõige sagedasemad vormid muidu ka levinud sõnad. Samas pidagem meeles, et praegu me vaatasime, mitmes laulus need fraasid on. Me võime ka vaadata mitu korda fraase esineb kokku.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>%
   count(bigram,song,sort=T) %>%
@@ -327,7 +327,7 @@ bigrams %>%
 #' 
 #' Tidyverse %>% märgiga kirjutatud koodis on selleks hea võimalus. Me võime lihtsalt mõne käsu välja kommenteerida # trellidega.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 bigrams %>% 
   #count(bigram,song,sort=T) %>%
@@ -340,7 +340,7 @@ bigrams %>%
 #' 
 #' Proovige leida, mis vormides 'eesti' lauludes esineb.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -360,7 +360,7 @@ bigrams %>%
 #' 
 #' Sarnaselt bigrammidele saame unnest_tokens() parameetreid sättides võtta tekstidest välja ka trigrammid.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 trigrams <- firstsongs %>%
   unnest_tokens(trigram, lyrics, token = "ngrams", n = 3, n_min = 3)
@@ -369,7 +369,7 @@ trigrams <- firstsongs %>%
 #' 
 #' Võime neid samuti loendada.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 trigrams %>%
   count(trigram,sort=T)
@@ -378,7 +378,7 @@ trigrams %>%
 #' 
 #' Ja võime ka nende kordusi loendada.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 trigrams %>%
   group_by(artist,song) %>% 
@@ -388,7 +388,7 @@ trigrams %>%
 #' 
 #' Kombineerides olemasolevaid käske võime nüüd näiteks otsida välja kõik fraasid, kus esineb sama sõna nii alguses kui lõpus. Me teame, et ^ märk tähistab rea algust ja et $ märk tähistab rea lõppu (vaata regulaaravaldiste juhendit moodle-is). Kui me nüüd võtame välja antud tabelist kõik esimesed ja viimased sõnad ja filtreerime välja ainult read, kus need on sama sõna, saamegi kätte oodatud tulemuse. Päris suur hulk fraase on sellist, kus on sees selline sõnakordus.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 trigrams %>%
   group_by(artist,song) %>% 
@@ -400,7 +400,7 @@ trigrams %>%
 #' 
 #' Keskmise sõna saaks kätte otsides sõnaäärseid tühikuid str_extract(trigram, " [a-zõäöü]+ "). Olles eraldanud sõna eraldi tulpa, võime sama tulpa käsitleda ka tekstina järgmisteks operatsioonideks. Kasutades olemasolevat informatsiooni, leia kõik fraasid, kus kõik kolm sõna on täpselt samad.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -428,7 +428,7 @@ trigrams %>%
 #' 
 #' Niisiis, saame käsu abiga hõlpsasti tuvastada teatud gruppi eristavad sõnad. Näiteks arvutame alustuseks artiste eristavad sõnad. Arvutame artiste teistest eristavad sõnad. Kuna me oleme seni kasutanud peatükis ainult fraase, siis arvutame kõigepealt laulusõnad. 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad <- edetabel %>% 
   unnest_tokens(word,lyrics)
@@ -437,7 +437,7 @@ laulusonad <- edetabel %>%
 #' 
 #' Leidmaks tf-idf märksõnu, loendame sõnu artistide kaupa ning siis juhendame, bind_tf_idf() funktsiooni, et ta kasutaks seda informatsiooni oma mõõdikute välja arvutamiseks. Lõpuks järjestame sõnad tf_idf alusel, kus suurem väärtus näitam suuremat eristusjõudu.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 
 tf_idf <- laulusonad %>%
@@ -451,7 +451,7 @@ tf_idf <- laulusonad %>%
 #' 
 #' Vaatame tabelit esialgu ise lähemalt.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 View(tf_idf)
 
@@ -462,7 +462,7 @@ View(tf_idf)
 #' Põnevamaks muutub see määr kui püüda vaadata mõne konkreetse artisti eristavaid märksõnu.Smilersi puhul on levinud sõnad ja, ma, ei ikkagi tipus, kuna neid kasutatakse nende lugudes läbivalt väga palju. Haruldasemad sõnad ilmnevad hiljem, aga on siiski kohal teises kümendis
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   group_by(artist) %>%
@@ -476,7 +476,7 @@ laulusonad %>%
 #' 
 #' Artistil, millel on lugusid korpuses vähem, on ka rohkem esil mõne üksiku loo märksõnad. Näiteks Nublul on korpuses kaks lugu ning sõnad, mis kordusid neis lugudes tihti, on selgelt esil. Nt ou, mina, ka.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   group_by(artist) %>%
@@ -489,7 +489,7 @@ laulusonad %>%
 #' 
 #' Mõnikord ei kasutatudki palju erinevaid sõnu. Näiteks artistil Koer saab need sõnad peaaegu kahe käe sõrmedel kokku lugeda ja ainult seetõttu, et ühe sõna iga täht on ka eraldi välja öeldud. Siiski on näha, et 'on' on neil kõige vähem eristavam sõna.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   group_by(artist) %>%
@@ -502,7 +502,7 @@ laulusonad %>%
 #' 
 #' Keskmise laulude hulgaga artistidel tulevad samuti märksõnad üksikutest lauludest esile. Nt Kuldsel Triol hopp, johanna, vodka, laika jne on kõik sõnad, mis on korpuses üldiselt väga haruldased, aga nende lugude seas piisavalt sagedased. See, millised sõnad selle valemiga esile tulevad sõltub niisiis nii korpuse iseloomust kui ka tekstide enda suurusest ja kujust. Selleks, et nendest seostest paremini aru saada, tasub katsetada erinevate tekstide puhul, et mis märksõnad peale jäävad. Mõnikord võib lisada neile lisafiltreid - näiteks jätta üldse kõrvale sõnad, mis on väga haruldased või väga tihti kasutatud.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   group_by(artist) %>%
@@ -515,7 +515,7 @@ laulusonad %>%
 #' 
 #' Proovi ise! Vali välja üks artist ning leia selle artisti kõige eristavamad sõnad.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 
 #---------------------------------------------
@@ -531,7 +531,7 @@ laulusonad %>%
 #' 
 #' Proovi ise! Vali välja ka üks laul ning proovi leida eristavad sõnad selle laulu kohta.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 

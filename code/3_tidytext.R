@@ -5,13 +5,13 @@
 #' ---
 #' 
 #' 
-#' # Tekstitöötlus tidyverse'is
+#' # Tidytext ja tekstitöötlus
 #' 
 #' Selles peatükis teeme esimest tutvust tidytext paketiga, mis on loodud tidyverse stiilis tekstitöötluseks R-is. See pakett ei suuda teha kõike ja ei pruugi olla alati ka kõige kiirem, aga teeb siiski ära lihtsama tekstitöötluse, mida meil vaja võib minna. Kui tekib huvi juurde õppida, siis selle paketi enda juhend on siin https://www.tidytextmining.com/.
 #' 
 #' Kui me alustasime R-i programmi uuesti on tarvis kõigepealt sisse lugeda paketid.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 library(tidyverse)
 
@@ -19,13 +19,13 @@ library(tidyverse)
 #' 
 #' tidytext pakett on tidyverse põhipaketist eraldi ning seetõttu tuleb eraldi sisse lugeda. Kui seda pole varem installitud, siis utleb ta ka installida.
 #' 
-## ----eval=F--------------------------------------------------------------------------------------------------------------------------------
+## ----eval=F------------------------------------------------------------------------
 ## 
 ## install.packages("tidytext")
 ## 
 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 library(tidytext)
 
@@ -33,7 +33,7 @@ library(tidytext)
 #' 
 #' Kui me käivitasime R-i uuesti, siis on meil vaja töötamiseks ka andmefail uuesti sisse lugeda.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel <- read_tsv("data/eesti_top40/eesti_skyplus_top40_1994-2018.tsv")
 
@@ -50,7 +50,7 @@ edetabel <- read_tsv("data/eesti_top40/eesti_skyplus_top40_1994-2018.tsv")
 #' 
 #' Vaatame kõigepealt selle lihtsamat tulemust. Järgmine käsk võtab andmestiku tunnnuse lyrics, teeb selle elementideks (mis on vaikimisi sõnad) ning salvestab kõik 'word' nimelisse tulpa.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 edetabel %>%
   unnest_tokens(word,lyrics)
@@ -60,7 +60,7 @@ edetabel %>%
 #' 
 #' Kui meil varem oli üks lugu tabelis iga rea kohta, siis nüüd on meil igal real üks sõna sellele kaasneva metainfoga. Ehk näha on midagi sellist.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 # A tibble: 157,632 x 9
 # year  rank votes artist    song      filename                   source language word          
 # <dbl> <dbl> <dbl> <chr>     <chr>     <chr>                       <dbl> <chr>    <chr>         
@@ -75,7 +75,7 @@ edetabel %>%
 #' 
 #' Kuna me kasutame seda andmekuju korduvalt ja tokeniseerimine võtab iga kord veidi aega, salvestame selle töötluse tulemuse ja viitame edaspidi juba töötluse lõpptulemusele.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad <- edetabel %>%
   unnest_tokens(word,lyrics)
@@ -84,7 +84,7 @@ laulusonad <- edetabel %>%
 #' 
 #' Selle tabeliga saame teha samasuguseid operatsioone kui edetabeliga enne. Näiteks võime võtta kõik sõnad, mis on ühelt bändilt.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   filter(artist=="Smilers")
@@ -100,7 +100,7 @@ laulusonad %>%
 #' 
 #' Proovi ise! Vali välja üks artist ning võta tabelist välja ainult nende kasutatud sõnad
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -120,7 +120,7 @@ laulusonad %>%
 #' 
 #' Et sõnade valikutest midagi huvitavat teada saada, võime hakata neid loendama - ehk siis teha sagedussõnastiku.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   count(word,sort=T)
@@ -131,7 +131,7 @@ laulusonad %>%
 #' 
 #' Me võime filtrite abil koostada ka sagedussõnastiku mõnele üksikule artistile ja vaadata neid ühekaupa.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   filter(artist=="Põhja-Tallinn") %>%
@@ -151,7 +151,7 @@ laulusonad %>%
 #' 
 #' Proovi ise! Vali välja üks artist ning vaata nende enimkasutatud sõnu.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -171,7 +171,7 @@ laulusonad %>%
 #' 
 #' Me võime kasutada ükskõik, millist tabelit sõnade loendina. Eesti keele jaoks on olemas hea stopsõnade loend siin http://datadoi.ut.ee/handle/33/78. Loeme selle sisse eraldi tabelina.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 stopsonad <- read_tsv("data/uiboaed_stopwords/estonian-stopwords.txt",col_names = "word")
 
@@ -183,7 +183,7 @@ stopsonad <- read_tsv("data/uiboaed_stopwords/estonian-stopwords.txt",col_names 
 #' ![](figures/joins.png)
 #' 
 #' 
-## ----echo=F, eval=F------------------------------------------------------------------------------------------------------------------------
+## ----echo=F, eval=F----------------------------------------------------------------
 ## library(grid)
 ## grid.newpage(); grid.raster(png::readPNG("figures/joins.png"))
 ## 
@@ -199,7 +199,7 @@ stopsonad <- read_tsv("data/uiboaed_stopwords/estonian-stopwords.txt",col_names 
 #' 
 #' Hetkel on meil kaks tabelit. Käivita järgmised read, et neid näha.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad
 stopsonad
@@ -208,7 +208,7 @@ stopsonad
 #' 
 #' Nüüd, liidame tabeli 'laulusonad' tabeliga 'stopsonad', kasutades inner_join() funktsiooni ja teeme seda "word" nimelise tulba kaudu, mis on mõlemas tabelis olemas. Tegelikult otsivad tidyverse join() käsud ka ise samanimelisi tulpasid ja kui neile täpsemaid juhiseid pole antud, siis ühendavad need. Kui me tegeleme uue andmestikuga on kasulik see alati välja kirjutada, et ei tekiks vigu.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   inner_join(stopsonad,by="word")
@@ -219,7 +219,7 @@ laulusonad %>%
 #' 
 #' Me võime proovida neid kahte tabelit liita left_join() funktsiooni kaudu. Sellega küll ei muutu midagi, kuna liidetud tabel stopsonad sisaldabki ainult ühte tulpa, ning liidetud sõnad sulanduvad esimesse tabelisse.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   left_join(stopsonad,by="word")
@@ -228,7 +228,7 @@ laulusonad %>%
 #' 
 #' Et kattuvad read ära markeerida võime teha stopsõnade tabelisse uue tulba, mis märgib, et on tõene, et see sõna on stopsõna.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 stopsonad2 <- stopsonad %>%
   mutate(onstopsona=TRUE)
@@ -237,7 +237,7 @@ stopsonad2 <- stopsonad %>%
 #' 
 #' Kui me nüüd ühendame tabelid left_join() kaudu, siis saame kaasa ka selle lisatulba.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   left_join(stopsonad2,by="word")
@@ -247,7 +247,7 @@ laulusonad %>%
 #' 
 #' Lihtsa väljundina võime näiteks kokku lugeda kumba on kui palju on kokku neid stopsõnu ja kui palju on muid sõnu (ehk neid, millel puudub informatsioon selle kohta, kas ta on stopsõna).
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   left_join(stopsonad2,by="word") %>%
@@ -259,7 +259,7 @@ laulusonad %>%
 #' 
 #' Samal põhimõttel võime ka leida kõige stopsõnaderikkama laulu.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   left_join(stopsonad2,by="word") %>%
@@ -277,7 +277,7 @@ laulusonad %>%
 #' 
 #' Proovi ise! Vali välja üks artist ja vaata milliseid stopsõnu nad kasutavad ja kui palju.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -293,7 +293,7 @@ laulusonad %>%
 #' 
 #' Enamasti on aga stopsõnade nimekiri kasulik, et need sõnad tekstist eemaldada. Näiteks võime võtta sama tabeli ja jätta alles ainult sõnad, mis ei ole stopsõnad. Selleks kasutame algusest tuttavat funktsiooni is.na(), mis kontrollib kas väärtus on puuduv. onstopsona == NA ei töötaks, kuna R-i jaoks on puuduvad väärtused erilised.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   left_join(stopsonad2,by="word") %>%
@@ -303,7 +303,7 @@ laulusonad %>%
 #' 
 #' Täpselt sama teeb ka käsk anti_join(), mis jätab kõrvale kõik read, kus tunnused on sama väärtusega. Seda kasutame ka edaspidi.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   anti_join(stopsonad,by="word")
@@ -312,7 +312,7 @@ laulusonad %>%
 #' 
 #' Sellega loendada kokku kõik sõnad, mis pole stopsõnad ja teha neist sagedustabeli.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   anti_join(stopsonad,by="word") %>%
@@ -322,7 +322,7 @@ laulusonad %>%
 #' 
 #' Nüüd näeme veel üht probleemi meie sõnaloendis. Paljud lood on ingliskeelsed ja seal on ka hulk sagedasi sõnu, mis samuti esiotsa pürgivad. Tabelis on olemas ka tunnus loo keele kohta ning selle abil võime piirduda edasi ainult eestikeelsete lugudega. Eestikeelsed lood on siin tähistatud rahvusvahelise tähisega 'et'.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   anti_join(stopsonad,by="word") %>%
@@ -333,7 +333,7 @@ laulusonad %>%
 #' 
 #' Saadud tabel on juba veidi informatiivsem
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 # A tibble: 15,823 x 2
 # word      n
 # <chr> <int>
@@ -352,7 +352,7 @@ laulusonad %>%
 #' 
 #' ref viitab siin refräänile. muidu on sagedased päev, öö, taas, jälle, hea, aeg, täna, tean. Olenevalt sellest, mis meid huvitab, tasub meil stopsõnadenimekirja žanrile kohandada. Näiteks võime siin lisaks stopsõnadele tabelist välja võtta ka sõna 'ref'.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   anti_join(stopsonad,by="word") %>%
@@ -364,7 +364,7 @@ laulusonad %>%
 #' 
 #' Salvestame selle tabeli samuti edasiseks kasutuseks.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 sonaloend <- laulusonad %>%
   anti_join(stopsonad,by="word") %>%
@@ -379,7 +379,7 @@ sonaloend <- laulusonad %>%
 #' 
 #' Me võime nüüd mõelda, kui tüüpiline meie laulusõnade korpus on võrreldes keelega üldisemalt. Nagu loengutes sai räägitud, on selleks kasulik vaadata sõnade suhtelist osakaalu korpuses, mitte absoluutarvu, kuna tekstikogude suurused võivad olla väga erinevad. Niisiis saame jagada leitud sõnade arvu kõikide sõnade arvu hulgaga, saades kätte millise proportsiooni see sõna tervikkorpusest moodustab.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 sonaloend %>%
   mutate(proportsioon=n/sum(n))
@@ -388,7 +388,7 @@ sonaloend %>%
 #' 
 #' Meil on võimalik seda proportsiooni võrrelda eesti ilukirjandusest tehtud korpusega. Ühe sellise korpuse kohta on sõnasageduste statistika saadaval siin. http://datadoi.ut.ee/handle/33/41. Loeme sisse sõnade sageduse info.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 ilukirj_sonad <- read_tsv("data/raudvere_uiboaed_mitmikud/token_1_grams.tsv",col_names = c("word","n_token","n_docs"))
 
@@ -402,7 +402,7 @@ ilukirj_sonad <- ilukirj_sonad %>%
 #' 
 #' Samamoodi nagu stopsõnade puhul, saame me nüüd ühendada need kaks tabelit.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 sonaloend %>%
   mutate(proportsioon=n/sum(n)) %>%
@@ -414,7 +414,7 @@ sonaloend %>%
 #' 
 #' Proovi vaadata ise mõne valitud sõna kohta, kuidas nende sagedused erinevad.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -430,7 +430,7 @@ sonaloend %>%
 #' 
 #' Kui meil on stopsõnad eemaldatud, võime ka vaadata kindlate artistide levinumaid sõnu, mis võiksid väljendada ka paremini nende lugude sisu. Niisiis, teeme sagedussõnastikud nende artistide kohta ja vaatame lähemalt.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   anti_join(stopsonad,by="word") %>%
@@ -456,7 +456,7 @@ laulusonad %>%
 #' Proovi ise! Vali välja üks artist ning vaata nende enimkasutatud sõnu ilma stopsõnadeta.
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -477,7 +477,7 @@ laulusonad %>%
 #' 
 #' Et teha sõnaloendeid laulude kohta, grupeerime tabeli kõigepealt laulude kaupa ning mõõdame sõnasagedusi sellel põhjal. Me võime siis vaadata näiteks kui suure osa kogu laulu sõnadest moodustab mõni konkreetne sõna.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>%
   filter(language=="et") %>%
@@ -495,7 +495,7 @@ laulusonad %>%
 #' Proovi ise! Kui lugeda mitte proportsiooni järgi vaid koguarvult, siis mis sõna on kõige rohkem ühe laulu sees kordumas ja mis laulus?
 #' 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -512,7 +512,7 @@ laulusonad %>%
 #' 
 #' Kui palju muutub tabel kui eemaldada stopsõnad?
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
@@ -535,7 +535,7 @@ laulusonad %>%
 #' 
 #' Niisiis, saame iga laulu sees sõna asukoha grupeerides laulud eraldi ning lisades uue tulba row_number().
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>% 
   group_by(artist,song,year) %>% 
@@ -546,7 +546,7 @@ laulusonad %>%
 #' 
 #' Kuna lood on erineva pikkusega, siis on võrdluse huvides ehk kasulik vaadata loo pikkust protsentidena. Selleks võime lisada ka loendi n() kaudu. mutate() võimaldab nii lisada mitu uut tunnust.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>% 
   group_by(artist,song,year) %>% 
@@ -556,7 +556,7 @@ laulusonad %>%
 #' 
 #' Ja kui meil on olemas nii rea number kui ridade arv võime välja arvutada sõna suhtelise asukoha. Lisame selleks tunnusele n ühe, et kõik tulemused oleks väiksem kui üks. 
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>% 
   group_by(artist,song,year) %>% 
@@ -567,7 +567,7 @@ laulusonad %>%
 #' 
 #' Selle tulemuse põhjal saame arvutada, millisel kümnendikul loos sõna paikneb. Selleks võime korrutada asukoha, mis on nullist üheni, kümnega, et saada vahemiku 0-st 10-ni ja iga tulemuse ümardada alla, et kätte saada, millises kümnendikus sõna esines. Kui me jagame selle uuesti 10-ga saame kätte väärtused 0, 0.1, 0.2 ... 0.9.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 laulusonad %>% 
   group_by(artist,song,year) %>% 
@@ -580,7 +580,7 @@ laulusonad %>%
 #' 
 #' Et me kasutame seda korduvalt võime jälle selle salvestada.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 asukohad <- laulusonad %>% 
   group_by(artist,song,year) %>% 
@@ -594,7 +594,7 @@ asukohad <- laulusonad %>%
 #' 
 #' Ja siis võime näiteks vaadata sõnu, mis palju kordi kordusid. Salvestame selle ka muutujana.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 kordused <- laulusonad %>%
   filter(language=="et") %>%
@@ -609,7 +609,7 @@ kordused <- laulusonad %>%
 #' 
 #' Võtame 20 kõige enam ühe loo sees korratud sõna ja ühendame selle asukohtade tabeliga nii, et kattuvad nii artist, laul, aasta kui ka sõna. Salvestame selle tulemuse ja vaatame sisse.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 asukohad_ja_kordused <- kordused %>% 
   filter(row_number()<21) %>% 
@@ -619,7 +619,7 @@ asukohad_ja_kordused <- kordused %>%
 #' 
 #' Seejärel võime kokku lugeda, et kui palju neid sellel protsendil on.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 kus_on_kordused <- asukohad_ja_kordused %>% 
   group_by(artist,song,year,word) %>% 
@@ -633,7 +633,7 @@ kus_on_kordused <- asukohad_ja_kordused %>%
 #' 
 #' Laotame siis tabeli laiali ja vaatame, kus on need sagedasi korduvad sõnad.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 kus_on_kordused %>%
   arrange(asukoht_perc) %>%
@@ -648,7 +648,7 @@ kus_on_kordused %>%
 #' 
 #' Kui me tahame laia tabeli taas pikaks teha, kasutame funktsiooni pivot_longer(). pivot_longer() tahab teada, milliseid tulpi lahutada ja mis kahe uue tulba nimeks panna.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 kus_on_kordused %>%
   arrange(asukoht_perc) %>%
@@ -663,7 +663,7 @@ kus_on_kordused %>%
 #' 
 #' Proovi ise! Vali mõni lugu ja sõna selles ning vaata, mis asukohtadel ta esineb.
 #' 
-## ------------------------------------------------------------------------------------------------------------------------------------------
+## ----------------------------------------------------------------------------------
 
 #---------------------------------------------
 
