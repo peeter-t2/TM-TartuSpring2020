@@ -1,0 +1,6 @@
+build/
+_bookdown_files/
+tekstid_R/
+.Rproj.user/
+_bookdown.yml
+index.Rmd
