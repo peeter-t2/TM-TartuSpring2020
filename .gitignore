@@ -4,3 +4,4 @@ tekstid_R/
 .Rproj.user/
 _bookdown.yml
 index.Rmd
+.gitignore
